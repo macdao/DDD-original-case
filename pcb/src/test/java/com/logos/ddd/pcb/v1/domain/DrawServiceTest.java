@@ -21,7 +21,7 @@ class DrawServiceTest {
         Chip startChip = Chip.builder().id(1L).type("A").build();
         Chip endChip = Chip.builder().id(2L).type("B").build();
         Net net = Net.builder().id(1L).build();
-        DrawService drawService = new DrawService(netRepository, chipRepository);
+        LinkChipService drawService = new LinkChipService(netRepository, chipRepository);
         ArgumentCaptor<Net> netCaptor = ArgumentCaptor.forClass(Net.class);
         Mockito.when(chipRepository.find(startChipId)).thenReturn(startChip);
         Mockito.when(chipRepository.find(endChipId)).thenReturn(endChip);

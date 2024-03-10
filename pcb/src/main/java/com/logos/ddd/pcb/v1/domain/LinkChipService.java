@@ -1,11 +1,14 @@
 package com.logos.ddd.pcb.v1.domain;
 
-public class DrawService {
+import org.springframework.stereotype.Service;
+
+@Service
+public class LinkChipService {
 
     private final NetRepository netRepository;
     private final ChipRepository chipRepository;
 
-    public DrawService(NetRepository netRepository, ChipRepository chipRepository) {
+    public LinkChipService(NetRepository netRepository, ChipRepository chipRepository) {
         this.netRepository = netRepository;
         this.chipRepository = chipRepository;
     }
