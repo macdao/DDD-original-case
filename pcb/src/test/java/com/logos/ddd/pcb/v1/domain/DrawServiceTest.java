@@ -2,12 +2,9 @@ package com.logos.ddd.pcb.v1.domain;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.matchers.CapturesArguments;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DrawServiceTest {
 
@@ -18,13 +15,18 @@ class DrawServiceTest {
     @Test
     void should_add_start_chip_and_end_chip_when_link_chip_given_two_chip_to_a_net() {
         // given
+        Long startChipId = 1L;
+        Long endChipId = 2L;
+
         Chip startChip = Chip.builder().id(1L).type("A").build();
         Chip endChip = Chip.builder().id(2L).type("B").build();
         Net net = Net.builder().id(1L).build();
         DrawService drawService = new DrawService(netRepository, chipRepository);
         ArgumentCaptor<Net> netCaptor = ArgumentCaptor.forClass(Net.class);
+        Mockito.when(chipRepository.find(startChipId)).thenReturn(startChip);
+        Mockito.when(chipRepository.find(endChipId)).thenReturn(endChip);
         // when
-        drawService.linkChip(net, startChip, endChip);
+        drawService.linkChip(startChipId, endChipId);
 
         // then
         Mockito.verify(netRepository).save(netCaptor.capture());

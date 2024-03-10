@@ -10,7 +10,11 @@ public class DrawService {
         this.chipRepository = chipRepository;
     }
 
-    public Net linkChip(Net net, Chip startChip, Chip endChip) {
+
+    public Net linkChip(Long startChipId, Long endChipId) {
+        Net net = new Net();
+        Chip startChip = chipRepository.find(startChipId);
+        Chip endChip = chipRepository.find(endChipId);
         net.setStartChip(startChip);
         net.setEndChip(endChip);
         return netRepository.save(net);
