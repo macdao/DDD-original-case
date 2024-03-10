@@ -1,7 +1,6 @@
 package com.logos.ddd.pcb.v1.application;
 
 import com.logos.ddd.pcb.v1.domain.LinkChipService;
-import com.logos.ddd.pcb.v1.domain.Net;
 import org.springframework.stereotype.Service;
 
 @Service
