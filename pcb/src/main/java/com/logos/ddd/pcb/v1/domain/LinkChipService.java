@@ -10,22 +10,22 @@ import java.util.*;
 @Service
 public class LinkChipService {
 
-    private final NetRepository netRepository;
+    private final WireRepository wireRepository;
     private final ChipRepository chipRepository;
 
-    public LinkChipService(NetRepository netRepository, ChipRepository chipRepository) {
-        this.netRepository = netRepository;
+    public LinkChipService(WireRepository wireRepository, ChipRepository chipRepository) {
+        this.wireRepository = wireRepository;
         this.chipRepository = chipRepository;
     }
 
 
-    public Net linkChip(Long startChipId, Long endChipId) {
-        Net net = new Net();
+    public Wire linkChip(Long startChipId, Long endChipId) {
+        Wire wire = new Wire();
         Chip startChip = chipRepository.find(startChipId);
         Chip endChip = chipRepository.find(endChipId);
-        net.setStartChip(startChip);
-        net.setEndChip(endChip);
-        return netRepository.save(net);
+        wire.setStartChip(startChip);
+        wire.setEndChip(endChip);
+        return wireRepository.save(wire);
     }
 
     public int getHops(Long aChipId, Long cChipId) {
@@ -58,11 +58,11 @@ public class LinkChipService {
     }
 
     private Map<Long, List<Long>> getNetGraph() {
-        List<Net> nets = netRepository.findAll();
+        List<Wire> wires = wireRepository.findAll();
         Map<Long, List<Long>> graph = new HashMap<>();
-        for (Net net : nets) {
-            Long startId = net.getStartChip().getId();
-            Long endId = net.getEndChip().getId();
+        for (Wire wire : wires) {
+            Long startId = wire.getStartChip().getId();
+            Long endId = wire.getEndChip().getId();
             graph.putIfAbsent(startId, new ArrayList<>());
             graph.putIfAbsent(endId, new ArrayList<>());
             graph.get(startId).add(endId);

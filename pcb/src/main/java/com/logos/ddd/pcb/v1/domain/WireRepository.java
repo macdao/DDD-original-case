@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface NetRepository {
-    Net save(Net net);
+public interface WireRepository {
+    Wire save(Wire wire);
 
-    List<Net> findAll();
+    List<Wire> findAll();
 }

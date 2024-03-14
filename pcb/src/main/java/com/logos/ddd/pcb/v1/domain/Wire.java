@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Net {
+public class Wire {
 
     private Long id;
     private Chip startChip;
