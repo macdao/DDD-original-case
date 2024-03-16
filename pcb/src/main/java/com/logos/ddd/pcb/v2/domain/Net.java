@@ -1,5 +1,6 @@
 package com.logos.ddd.pcb.v2.domain;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Chip {
+public class Net {
+
     private Long id;
-    private String type;
+    private ComponentInstance startComponentInstance;
+    private ComponentInstance endComponentInstance;
 }

@@ -1,6 +1,5 @@
 package com.logos.ddd.pcb.v2.domain;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Wire {
-
+public class ComponentInstance {
     private Long id;
-    private Chip startChip;
-    private Chip endChip;
+    private String type;
 }

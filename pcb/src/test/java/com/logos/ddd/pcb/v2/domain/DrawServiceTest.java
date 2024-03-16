@@ -21,21 +21,21 @@ class DrawServiceTest {
         Long startChipId = 1L;
         Long endChipId = 2L;
 
-        Chip startChip = Chip.builder().id(1L).type("A").build();
-        Chip endChip = Chip.builder().id(2L).type("B").build();
+        ComponentInstance startComponentInstance = ComponentInstance.builder().id(1L).type("A").build();
+        ComponentInstance endComponentInstance = ComponentInstance.builder().id(2L).type("B").build();
         LinkChipService drawService = new LinkChipService(wireRepository, chipRepository);
-        ArgumentCaptor<Wire> netCaptor = ArgumentCaptor.forClass(Wire.class);
-        Mockito.when(chipRepository.find(startChipId)).thenReturn(startChip);
-        Mockito.when(chipRepository.find(endChipId)).thenReturn(endChip);
+        ArgumentCaptor<Net> netCaptor = ArgumentCaptor.forClass(Net.class);
+        Mockito.when(chipRepository.find(startChipId)).thenReturn(startComponentInstance);
+        Mockito.when(chipRepository.find(endChipId)).thenReturn(endComponentInstance);
 
         // when
         drawService.linkChip(startChipId, endChipId);
 
         // then
         Mockito.verify(wireRepository).save(netCaptor.capture());
-        Wire savedWire = netCaptor.getValue();
-        assertEquals(startChip, savedWire.getStartChip());
-        assertEquals(endChip, savedWire.getEndChip());
+        Net savedNet = netCaptor.getValue();
+        assertEquals(startComponentInstance, savedNet.getStartComponentInstance());
+        assertEquals(endComponentInstance, savedNet.getEndComponentInstance());
     }
 
 //             ┌╶╶╶╶╶┐       ┌╶╶╶╶╶┐     ┌╶╶╶╶╶┐
@@ -52,14 +52,14 @@ class DrawServiceTest {
         Long cChipId = 3L;
         int expectedHops = 2; // replace with the expected number of hops
 
-        Chip aChip = Chip.builder().id(aChipId).type("A").build();
-        Chip bChip = Chip.builder().id(bChipId).type("B").build();
-        Chip cChip = Chip.builder().id(cChipId).type("A").build();
-        Wire wireBetweenAAndB = Wire.builder().id(1L).startChip(aChip).endChip(bChip).build();
-        Wire wireBetweenBAndC = Wire.builder().id(2L).startChip(bChip).endChip(cChip).build();
+        ComponentInstance aComponentInstance = ComponentInstance.builder().id(aChipId).type("A").build();
+        ComponentInstance bComponentInstance = ComponentInstance.builder().id(bChipId).type("B").build();
+        ComponentInstance cComponentInstance = ComponentInstance.builder().id(cChipId).type("A").build();
+        Net netBetweenAAndB = Net.builder().id(1L).startComponentInstance(aComponentInstance).endComponentInstance(bComponentInstance).build();
+        Net netBetweenBAndC = Net.builder().id(2L).startComponentInstance(bComponentInstance).endComponentInstance(cComponentInstance).build();
         LinkChipService linkChipService = new LinkChipService(wireRepository, chipRepository);
 
-        Mockito.when(wireRepository.findAll()).thenReturn(List.of(wireBetweenAAndB, wireBetweenBAndC));
+        Mockito.when(wireRepository.findAll()).thenReturn(List.of(netBetweenAAndB, netBetweenBAndC));
 
         // when
         int actualHops = linkChipService.getHops(aChipId, cChipId);

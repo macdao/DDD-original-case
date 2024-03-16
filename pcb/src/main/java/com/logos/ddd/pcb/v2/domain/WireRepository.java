@@ -6,7 +6,7 @@ import java.util.List;
 
 @Component
 public interface WireRepository {
-    Wire save(Wire wire);
+    Net save(Net net);
 
-    List<Wire> findAll();
+    List<Net> findAll();
 }

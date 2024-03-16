@@ -5,5 +5,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface ChipRepository {
-    Chip find(Long id);
+    ComponentInstance find(Long id);
 }
