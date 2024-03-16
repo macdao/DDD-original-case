@@ -1,10 +1,5 @@
 package com.logos.ddd.pcb.v2.domain;
 
-
-import com.logos.ddd.pcb.v1.domain.Chip;
-import com.logos.ddd.pcb.v1.domain.ChipRepository;
-import com.logos.ddd.pcb.v1.domain.Wire;
-import com.logos.ddd.pcb.v1.domain.WireRepository;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
@@ -14,8 +9,8 @@ import java.util.*;
 @Service
 public class LinkChipService {
 
-    private final com.logos.ddd.pcb.v1.domain.WireRepository wireRepository;
-    private final com.logos.ddd.pcb.v1.domain.ChipRepository chipRepository;
+    private final WireRepository wireRepository;
+    private final ChipRepository chipRepository;
 
     public LinkChipService(WireRepository wireRepository, ChipRepository chipRepository) {
         this.wireRepository = wireRepository;
@@ -23,9 +18,9 @@ public class LinkChipService {
     }
 
 
-    public com.logos.ddd.pcb.v1.domain.Wire linkChip(Long startChipId, Long endChipId) {
-        com.logos.ddd.pcb.v1.domain.Wire wire = new com.logos.ddd.pcb.v1.domain.Wire();
-        com.logos.ddd.pcb.v1.domain.Chip startChip = chipRepository.find(startChipId);
+    public Wire linkChip(Long startChipId, Long endChipId) {
+        Wire wire = new Wire();
+        Chip startChip = chipRepository.find(startChipId);
         Chip endChip = chipRepository.find(endChipId);
         wire.setStartChip(startChip);
         wire.setEndChip(endChip);
@@ -62,7 +57,7 @@ public class LinkChipService {
     }
 
     private Map<Long, List<Long>> getNetGraph() {
-        List<com.logos.ddd.pcb.v1.domain.Wire> wires = wireRepository.findAll();
+        List<Wire> wires = wireRepository.findAll();
         Map<Long, List<Long>> graph = new HashMap<>();
         for (Wire wire : wires) {
             Long startId = wire.getStartChip().getId();
