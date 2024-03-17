@@ -1,4 +1,4 @@
-package com.logos.ddd.pcb.v2.domain;
+package com.logos.ddd.pcb.v2.domain.component.instance;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

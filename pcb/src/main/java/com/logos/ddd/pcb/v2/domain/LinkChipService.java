@@ -1,5 +1,9 @@
 package com.logos.ddd.pcb.v2.domain;
 
+import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
+import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceRepository;
+import com.logos.ddd.pcb.v2.domain.net.Net;
+import com.logos.ddd.pcb.v2.domain.net.NetRepository;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
@@ -9,22 +13,22 @@ import java.util.*;
 @Service
 public class LinkChipService {
 
-    private final WireRepository wireRepository;
-    private final ChipRepository chipRepository;
+    private final NetRepository netRepository;
+    private final ComponentInstanceRepository componentInstanceRepository;
 
-    public LinkChipService(WireRepository wireRepository, ChipRepository chipRepository) {
-        this.wireRepository = wireRepository;
-        this.chipRepository = chipRepository;
+    public LinkChipService(NetRepository netRepository, ComponentInstanceRepository componentInstanceRepository) {
+        this.netRepository = netRepository;
+        this.componentInstanceRepository = componentInstanceRepository;
     }
 
 
     public Net linkChip(Long startChipId, Long endChipId) {
         Net net = new Net();
-        ComponentInstance startComponentInstance = chipRepository.find(startChipId);
-        ComponentInstance endComponentInstance = chipRepository.find(endChipId);
+        ComponentInstance startComponentInstance = componentInstanceRepository.find(startChipId);
+        ComponentInstance endComponentInstance = componentInstanceRepository.find(endChipId);
         net.setStartComponentInstance(startComponentInstance);
         net.setEndComponentInstance(endComponentInstance);
-        return wireRepository.save(net);
+        return netRepository.save(net);
     }
 
     public int getHops(Long aChipId, Long cChipId) {
@@ -57,7 +61,7 @@ public class LinkChipService {
     }
 
     private Map<Long, List<Long>> getNetGraph() {
-        List<Net> nets = wireRepository.findAll();
+        List<Net> nets = netRepository.findAll();
         Map<Long, List<Long>> graph = new HashMap<>();
         for (Net net : nets) {
             Long startId = net.getStartComponentInstance().getId();

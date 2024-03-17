@@ -1,6 +1,7 @@
-package com.logos.ddd.pcb.v2.domain;
+package com.logos.ddd.pcb.v2.domain.net;
 
 
+import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
