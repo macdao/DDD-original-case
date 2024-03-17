@@ -14,7 +14,7 @@ class ComponentTypeTest {
         //given
         PinType pinType2 = new PinType(2, List.of());
         PinType pinType3 = new PinType(3, List.of());
-        PinType pinType1 = new PinType(1, List.of(pinType2, pinType3));
+        PinType pinType1 = new PinType(1, List.of(2,3));
         ComponentType componentType = new ComponentType("A", List.of(pinType1, pinType2, pinType3));
         //when
         List<Integer> outputPins = componentType.getOutputPins(1);

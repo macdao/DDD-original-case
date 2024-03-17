@@ -8,19 +8,10 @@ import java.util.List;
 @Getter
 public class PinInstance {
     private int number;
-    private List<PinInstance> outPins;
-
-    public PinInstance(int number, List<PinInstance> outPins) {
-        this.number = number;
-        this.outPins = outPins;
-    }
+    private List<Integer> outPutPinNumber;
 
     public PinInstance(PinType type) {
         this.number = type.getNumber();
-        this.outPins = type.getOutputPinTypes().stream().map(PinInstance::new).toList();
-    }
-
-    List<Integer> getOutPutPinNumber() {
-        return outPins.stream().map(PinInstance::getNumber).toList();
+        this.outPutPinNumber = type.getOutPutPinNumber();
     }
 }

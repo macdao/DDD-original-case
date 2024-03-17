@@ -14,7 +14,7 @@ class ComponentInstanceFactoryTest {
     void should_create_component_instance_by_component_type_when_create_component_instance_by_type() {
         //given
         PinType pinType1 = new PinType(1, List.of());
-        PinType pinType2 = new PinType(2, List.of(pinType1));
+        PinType pinType2 = new PinType(2, List.of(1));
         ComponentType componentType = new ComponentType("A", List.of(pinType1, pinType2));
         //when
         ComponentInstance componentInstance = ComponentInstanceFactory.createByType(componentType);

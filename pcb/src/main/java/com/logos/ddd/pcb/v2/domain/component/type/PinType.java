@@ -6,15 +6,12 @@ import java.util.List;
 
 @Getter
 public class PinType {
-    private final int number;
-    private final List<PinType> outputPinTypes;
+    private  int number;
+    private  List<Integer> outPutPinNumber;
 
-    public PinType(int number, List<PinType> outputPinTypes) {
+
+    public PinType(int number, List<Integer> outPutPinNumber) {
         this.number = number;
-        this.outputPinTypes = outputPinTypes;
-    }
-
-    List<Integer> getOutPutPinNumber() {
-        return getOutputPinTypes().stream().map(PinType::getNumber).toList();
+        this.outPutPinNumber = outPutPinNumber;
     }
 }
