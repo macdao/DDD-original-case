@@ -1,9 +1,12 @@
 package com.logos.ddd.pcb.v2.domain.component.instance;
 
+import com.logos.ddd.pcb.v2.domain.component.type.ComponentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -11,5 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ComponentInstance {
     private Long id;
-    private String type;
+    private ComponentType type;
+    private List<PinInstance> pins;
+
+    public List<Integer> getOutPins(int pinNumber) {
+        return pins.stream().filter(pin -> pin.getNumber() == pinNumber).findFirst()
+                .map(PinInstance::getOutPutPinNumber).orElse(List.of());
+    }
 }

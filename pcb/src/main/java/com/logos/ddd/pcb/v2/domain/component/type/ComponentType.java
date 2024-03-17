@@ -1,13 +1,16 @@
 package com.logos.ddd.pcb.v2.domain.component.type;
 
+import lombok.Getter;
+
 import java.util.List;
 
 
+@Getter
 public class ComponentType {
-    private final String name;
-    private final List<PinType> pinTypes;
+    private String name;
+    private List<PinType> pinTypes;
 
-    ComponentType(String name, List<PinType> pinTypes) {
+    public ComponentType(String name, List<PinType> pinTypes) {
         this.name = name;
         this.pinTypes = pinTypes;
     }
