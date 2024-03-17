@@ -2,10 +2,7 @@ package com.logos.ddd.pcb.v2.domain.net;
 
 
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +13,6 @@ public class Net {
     private Long id;
     private ComponentInstance startComponentInstance;
     private ComponentInstance endComponentInstance;
+    private int startPinNumber;
+    private int endPinNumber;
 }

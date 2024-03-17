@@ -21,55 +21,35 @@ class DrawServiceTest {
     private ComponentInstanceRepository componentInstanceRepository = Mockito.mock(ComponentInstanceRepository.class);
     private NetRepository netRepository = Mockito.mock(NetRepository.class);
 
-//    @Test
-//    void should_add_start_chip_and_end_chip_when_link_chip_given_two_chip_to_a_net() {
-//        // given
-//        Long startChipId = 1L;
-//        Long endChipId = 2L;
-//
-//        ComponentInstance startComponentInstance = ComponentInstance.builder().id(1L).type("A").build();
-//        ComponentInstance endComponentInstance = ComponentInstance.builder().id(2L).type("B").build();
-//        LinkChipService drawService = new LinkChipService(netRepository, componentInstanceRepository);
-//        ArgumentCaptor<Net> netCaptor = ArgumentCaptor.forClass(Net.class);
-//        Mockito.when(componentInstanceRepository.find(startChipId)).thenReturn(startComponentInstance);
-//        Mockito.when(componentInstanceRepository.find(endChipId)).thenReturn(endComponentInstance);
-//
-//        // when
-//        drawService.linkChip(startChipId, endChipId);
-//
-//        // then
-//        Mockito.verify(netRepository).save(netCaptor.capture());
-//        Net savedNet = netCaptor.getValue();
-//        assertEquals(startComponentInstance, savedNet.getStartComponentInstance());
-//        assertEquals(endComponentInstance, savedNet.getEndComponentInstance());
-//    }
+    @Test
+    void should_link_two_component_instance_when_link_given_two_pin_instance() {
 
-//    @Test
-//    void should_new_a_net_with_start_component_instance_pin_and_end_component_instance_pin_when_link_given_two_component_instance_pins() {
-//        // given
-//        Long startComponentInstanceId = 1L;
-//        Long endComponentInstanceId = 2L;
-//        int startComponentInstancePin = 1;
-//        int endComponentInstancePin = 2;
-//        LinkChipService drawService = new LinkChipService(netRepository, componentInstanceRepository);
-//        ArgumentCaptor<Net> netCaptor = ArgumentCaptor.forClass(Net.class);
-//        PinType pinType2 = new PinType(2, List.of());
-//        PinType pinType3 = new PinType(3, List.of());
-//        PinType pinType1 = new PinType(1, List.of(pinType2, pinType3));
-//        ComponentType componentType = new ComponentType("A", List.of(pinType1, pinType2, pinType3));
-//        ComponentInstance startComponentInstance = ComponentInstance.builder().id(1L).type(componentType).build();
-//        ComponentInstance endComponentInstance = ComponentInstance.builder().id(2L).type(componentType).build();
-//        Mockito.when(componentInstanceRepository.find(startComponentInstanceId)).thenReturn(startComponentInstance);
-//        Mockito.when(componentInstanceRepository.find(endComponentInstanceId)).thenReturn(endComponentInstance);
-//
-//        // when
-//        drawService.link(startComponentInstanceId, startComponentInstancePin, endComponentInstanceId, endComponentInstancePin);
-//
-//        // then
-//        Mockito.verify(netRepository).save(netCaptor.capture());
-//        Net savedNet = netCaptor.getValue();
-//
-//    }
+
+        Long startComponentInstanceId = 1L;
+        Long endComponentInstanceId = 2L;
+        int startPinNumber = 2;
+        int endPinNumber = 1;
+        LinkChipService drawService = new LinkChipService(netRepository, componentInstanceRepository);
+        ArgumentCaptor<Net> netCaptor = ArgumentCaptor.forClass(Net.class);
+        PinType pinType2 = new PinType(2, List.of());
+        PinType pinType3 = new PinType(3, List.of());
+        PinType pinType1 = new PinType(1, List.of(2, 3));
+        ComponentType componentType = new ComponentType("A", List.of(pinType1, pinType2, pinType3));
+        ComponentInstance startComponentInstance = ComponentInstance.builder().id(1L).type(componentType).build();
+        ComponentInstance endComponentInstance = ComponentInstance.builder().id(2L).type(componentType).build();
+        Mockito.when(componentInstanceRepository.find(startComponentInstanceId)).thenReturn(startComponentInstance);
+        Mockito.when(componentInstanceRepository.find(endComponentInstanceId)).thenReturn(endComponentInstance);
+
+        // when
+        drawService.link(startComponentInstanceId, startPinNumber, endComponentInstanceId, endPinNumber);
+
+        // then
+        Mockito.verify(netRepository).save(netCaptor.capture());
+        Net savedNet = netCaptor.getValue();
+        assertEquals(startComponentInstance, savedNet.getStartComponentInstance());
+        assertEquals(2, savedNet.getStartPinNumber());
+        assertEquals(1, savedNet.getEndPinNumber());
+    }
 
 
 //             ┌╶╶╶╶╶┐       ┌╶╶╶╶╶┐     ┌╶╶╶╶╶┐

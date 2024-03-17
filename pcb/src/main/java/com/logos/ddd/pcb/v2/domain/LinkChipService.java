@@ -77,4 +77,16 @@ public class LinkChipService {
     private boolean isInQueue(Queue<Pair<Long, Integer>> queue, Long chipId) {
         return queue.stream().anyMatch(pair -> pair.getKey().equals(chipId));
     }
+
+    public void link(Long startComponentInstanceId, int startComponentInstancePin,
+                     Long endComponentInstanceId, int endComponentInstancePin) {
+        Net net = new Net();
+        ComponentInstance startComponentInstance = componentInstanceRepository.find(startComponentInstanceId);
+        ComponentInstance endComponentInstance = componentInstanceRepository.find(endComponentInstanceId);
+        net.setStartComponentInstance(startComponentInstance);
+        net.setEndComponentInstance(endComponentInstance);
+        net.setStartPinNumber(startComponentInstancePin);
+        net.setEndPinNumber(endComponentInstancePin);
+        netRepository.save(net);
+    }
 }
