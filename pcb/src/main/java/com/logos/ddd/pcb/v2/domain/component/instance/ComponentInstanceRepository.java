@@ -6,4 +6,6 @@ import org.springframework.stereotype.Component;
 @Component
 public interface ComponentInstanceRepository {
     ComponentInstance find(Long id);
+
+    ComponentInstance save(ComponentInstance componentInstance);
 }
