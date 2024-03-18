@@ -21,61 +21,68 @@ public class LinkChipService {
         this.componentInstanceRepository = componentInstanceRepository;
     }
 
+    public int getHops(Long startComponentInstanceId, int startPinNumber, Long endComponentInstanceId, int endPinNumber) {
+        // Load all nets
+        List<Net> nets = netRepository.findAll();
 
-    public Net linkChip(Long startChipId, Long endChipId) {
-        Net net = new Net();
-        ComponentInstance startComponentInstance = componentInstanceRepository.find(startChipId);
-        ComponentInstance endComponentInstance = componentInstanceRepository.find(endChipId);
-        net.setStartComponentInstance(startComponentInstance);
-        net.setEndComponentInstance(endComponentInstance);
-        return netRepository.save(net);
-    }
+        // Create a map to store the adjacency list
+        Map<Pair<Long, Integer>, List<Pair<Long, Integer>>> graph = new HashMap<>();
 
-    public int getHops(Long aChipId, Long cChipId) {
-        Map<Long, List<Long>> graph = getNetGraph();
+        // Build the graph
+        for (Net net : nets) {
+            Pair<Long, Integer> start = Pair.of(net.getStartComponentInstance().getId(), net.getStartPinNumber());
+            Pair<Long, Integer> end = Pair.of(net.getEndComponentInstance().getId(), net.getEndPinNumber());
+            graph.putIfAbsent(start, new ArrayList<>());
+            graph.get(start).add(end);
 
-        return getHopsUseBFS(aChipId, cChipId, graph);
-    }
-
-    private int getHopsUseBFS(Long aChipId, Long cChipId, Map<Long, List<Long>> graph) {
-        Queue<Pair<Long, Integer>> queue = new LinkedList<>();
-        Set<Long> visited = new HashSet<>();
-        queue.offer(new MutablePair<>(aChipId, 0));
-        visited.add(aChipId);
-        while (!queue.isEmpty()) {
-            Pair<Long, Integer> pair = queue.poll();
-            Long chipId = pair.getKey();
-            Integer hops = pair.getValue();
-            if (chipId.equals(cChipId)) {
-                return hops;
+            List<Integer> outputPins = net.getStartComponentInstance().getOutPins(net.getStartPinNumber());
+            for (Integer outputPin : outputPins) {
+                Pair<Long, Integer> internalEnd = Pair.of(net.getStartComponentInstance().getId(), outputPin);
+                graph.putIfAbsent(start, new ArrayList<>());
+                graph.get(start).add(internalEnd);
             }
-            for (Long neighborId : graph.getOrDefault(chipId, new ArrayList<>())) {
-                if (!visited.contains(neighborId) && !isInQueue(queue, neighborId)) {
-                    queue.offer(new MutablePair<>(neighborId, hops + 1));
-                    visited.add(neighborId);
+
+            List<Integer> endOutputPins = net.getEndComponentInstance().getOutPins(net.getEndPinNumber());
+            for (Integer endOutputPin : endOutputPins) {
+                Pair<Long, Integer> internalEnd = Pair.of(net.getEndComponentInstance().getId(), endOutputPin);
+                graph.putIfAbsent(end, new ArrayList<>());
+                graph.get(end).add(internalEnd);
+            }
+        }
+
+        // Define the start and end nodes
+        Pair<Long, Integer> startNode = Pair.of(startComponentInstanceId, startPinNumber);
+        Pair<Long, Integer> endNode = Pair.of(endComponentInstanceId, endPinNumber);
+
+        // Use BFS to find the shortest path
+        Queue<Pair<Long, Integer>> queue = new LinkedList<>();
+        Map<Pair<Long, Integer>, Integer> distances = new HashMap<>();
+        queue.offer(startNode);
+        distances.put(startNode, 0);
+
+        while (!queue.isEmpty()) {
+            Pair<Long, Integer> node = queue.poll();
+            int distance = distances.get(node);
+
+            if (node.equals(endNode)) {
+                return distance;
+            }
+
+            for (Pair<Long, Integer> neighbor : graph.getOrDefault(node, Collections.emptyList())) {
+                if (!distances.containsKey(neighbor)) {
+                    queue.offer(neighbor);
+                    // Only increase the distance if the hop is not within the same component instance
+                    if (!node.getLeft().equals(neighbor.getLeft())) {
+                        distances.put(neighbor, distance + 1);
+                    } else {
+                        distances.put(neighbor, distance);
+                    }
                 }
             }
         }
 
+        // If there is no path from the start node to the end node, return -1
         return -1;
-    }
-
-    private Map<Long, List<Long>> getNetGraph() {
-        List<Net> nets = netRepository.findAll();
-        Map<Long, List<Long>> graph = new HashMap<>();
-        for (Net net : nets) {
-            Long startId = net.getStartComponentInstance().getId();
-            Long endId = net.getEndComponentInstance().getId();
-            graph.putIfAbsent(startId, new ArrayList<>());
-            graph.putIfAbsent(endId, new ArrayList<>());
-            graph.get(startId).add(endId);
-            graph.get(endId).add(startId);
-        }
-        return graph;
-    }
-
-    private boolean isInQueue(Queue<Pair<Long, Integer>> queue, Long chipId) {
-        return queue.stream().anyMatch(pair -> pair.getKey().equals(chipId));
     }
 
     public void link(Long startComponentInstanceId, int startComponentInstancePin,

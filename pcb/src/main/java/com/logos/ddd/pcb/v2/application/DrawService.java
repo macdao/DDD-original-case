@@ -12,10 +12,12 @@ public class DrawService {
 
     private final LinkChipService linkChipService;
     private final ComponentInstanceRepository componentInstanceRepository;
+    private final ComponentInstanceFactory componentInstanceFactory;
 
-    public DrawService(LinkChipService linkChipService, ComponentInstanceRepository componentInstanceRepository) {
+    public DrawService(LinkChipService linkChipService, ComponentInstanceRepository componentInstanceRepository, ComponentInstanceFactory componentInstanceFactory) {
         this.linkChipService = linkChipService;
         this.componentInstanceRepository = componentInstanceRepository;
+        this.componentInstanceFactory = componentInstanceFactory;
     }
 
     public void linkChip(Long startChipId, Long endChipId) {
@@ -23,7 +25,7 @@ public class DrawService {
     }
 
     public ComponentInstance createComponentInstance(ComponentType type) {
-        ComponentInstance componentInstance = ComponentInstanceFactory.createByType(type);
+        ComponentInstance componentInstance = componentInstanceFactory.createByType(type);
         componentInstanceRepository.save(componentInstance);
         return componentInstance;
     }
