@@ -2,6 +2,7 @@ package com.logos.ddd.pcb.v2.domain;
 
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceRepository;
+import com.logos.ddd.pcb.v2.domain.component.instance.Pin;
 import com.logos.ddd.pcb.v2.domain.net.Net;
 import com.logos.ddd.pcb.v2.domain.net.NetRepository;
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -26,53 +27,55 @@ public class LinkChipService {
         List<Net> nets = netRepository.findAll();
 
         // Create a map to store the adjacency list
-        Map<Pair<Long, Integer>, List<Pair<Long, Integer>>> graph = new HashMap<>();
+        Map<Pin, List<Pin>> graph = new HashMap<>();
 
         // Build the graph
         for (Net net : nets) {
-            Pair<Long, Integer> start = Pair.of(net.getStartComponentInstance().getId(), net.getStartPinNumber());
-            Pair<Long, Integer> end = Pair.of(net.getEndComponentInstance().getId(), net.getEndPinNumber());
+            Pin start = net.startPin();
+            Pin end = net.endPin();
             graph.putIfAbsent(start, new ArrayList<>());
             graph.get(start).add(end);
 
-            List<Integer> outputPins = net.getStartComponentInstance().getOutPins(net.getStartPinNumber());
+            ComponentInstance startComponentInstance = componentInstanceRepository.find(net.startPin().componentInstanceId());
+            List<Integer> outputPins = startComponentInstance.getOutPins(net.startPin().pinNumber());
             for (Integer outputPin : outputPins) {
-                Pair<Long, Integer> internalEnd = Pair.of(net.getStartComponentInstance().getId(), outputPin);
+                Pin internalEnd = new Pin(net.startPin().componentInstanceId(), outputPin);
                 graph.putIfAbsent(start, new ArrayList<>());
                 graph.get(start).add(internalEnd);
             }
 
-            List<Integer> endOutputPins = net.getEndComponentInstance().getOutPins(net.getEndPinNumber());
+            ComponentInstance endComponentInstance = componentInstanceRepository.find(net.endPin().componentInstanceId());
+            List<Integer> endOutputPins = endComponentInstance.getOutPins(net.endPin().pinNumber());
             for (Integer endOutputPin : endOutputPins) {
-                Pair<Long, Integer> internalEnd = Pair.of(net.getEndComponentInstance().getId(), endOutputPin);
+                var internalEnd = new Pin(endComponentInstance.getId(), endOutputPin);
                 graph.putIfAbsent(end, new ArrayList<>());
                 graph.get(end).add(internalEnd);
             }
         }
 
         // Define the start and end nodes
-        Pair<Long, Integer> startNode = Pair.of(startComponentInstanceId, startPinNumber);
-        Pair<Long, Integer> endNode = Pair.of(endComponentInstanceId, endPinNumber);
+        Pin startNode = new Pin(startComponentInstanceId, startPinNumber);
+        Pin endNode = new Pin(endComponentInstanceId, endPinNumber);
 
         // Use BFS to find the shortest path
-        Queue<Pair<Long, Integer>> queue = new LinkedList<>();
-        Map<Pair<Long, Integer>, Integer> distances = new HashMap<>();
+        Queue<Pin> queue = new LinkedList<>();
+        Map<Pin, Integer> distances = new HashMap<>();
         queue.offer(startNode);
         distances.put(startNode, 0);
 
         while (!queue.isEmpty()) {
-            Pair<Long, Integer> node = queue.poll();
+            Pin node = queue.poll();
             int distance = distances.get(node);
 
             if (node.equals(endNode)) {
                 return distance;
             }
 
-            for (Pair<Long, Integer> neighbor : graph.getOrDefault(node, Collections.emptyList())) {
+            for (Pin neighbor : graph.getOrDefault(node, Collections.emptyList())) {
                 if (!distances.containsKey(neighbor)) {
                     queue.offer(neighbor);
                     // Only increase the distance if the hop is not within the same component instance
-                    if (!node.getLeft().equals(neighbor.getLeft())) {
+                    if (!node.componentInstanceId().equals(neighbor.componentInstanceId())) {
                         distances.put(neighbor, distance + 1);
                     } else {
                         distances.put(neighbor, distance);
@@ -85,15 +88,8 @@ public class LinkChipService {
         return -1;
     }
 
-    public void link(Long startComponentInstanceId, int startComponentInstancePin,
-                     Long endComponentInstanceId, int endComponentInstancePin) {
-        Net net = new Net();
-        ComponentInstance startComponentInstance = componentInstanceRepository.find(startComponentInstanceId);
-        ComponentInstance endComponentInstance = componentInstanceRepository.find(endComponentInstanceId);
-        net.setStartComponentInstance(startComponentInstance);
-        net.setEndComponentInstance(endComponentInstance);
-        net.setStartPinNumber(startComponentInstancePin);
-        net.setEndPinNumber(endComponentInstancePin);
+    public void link(Pin startPin, Pin endPin) {
+        Net net = new Net(1001L, startPin, endPin);
         netRepository.save(net);
     }
 }

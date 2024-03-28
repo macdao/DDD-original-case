@@ -4,6 +4,7 @@ package com.logos.ddd.pcb.v2.domain;
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceFactory;
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceRepository;
+import com.logos.ddd.pcb.v2.domain.component.instance.Pin;
 import com.logos.ddd.pcb.v2.domain.component.type.ComponentType;
 import com.logos.ddd.pcb.v2.domain.net.Net;
 import com.logos.ddd.pcb.v2.domain.net.NetRepository;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 class DrawServiceTest {
 
@@ -40,18 +42,18 @@ class DrawServiceTest {
         ));
         ComponentInstance startComponentInstance = ComponentInstance.builder().id(1L).type(componentType).build();
         ComponentInstance endComponentInstance = ComponentInstance.builder().id(2L).type(componentType).build();
-        Mockito.when(componentInstanceRepository.find(startComponentInstanceId)).thenReturn(startComponentInstance);
-        Mockito.when(componentInstanceRepository.find(endComponentInstanceId)).thenReturn(endComponentInstance);
+        when(componentInstanceRepository.find(startComponentInstanceId)).thenReturn(startComponentInstance);
+        when(componentInstanceRepository.find(endComponentInstanceId)).thenReturn(endComponentInstance);
 
         // when
-        drawService.link(startComponentInstanceId, startPinNumber, endComponentInstanceId, endPinNumber);
+        drawService.link(new Pin(startComponentInstanceId, startPinNumber), new Pin(endComponentInstanceId, endPinNumber));
 
         // then
         Mockito.verify(netRepository).save(netCaptor.capture());
         Net savedNet = netCaptor.getValue();
-        assertEquals(startComponentInstance, savedNet.getStartComponentInstance());
-        assertEquals(2, savedNet.getStartPinNumber());
-        assertEquals(1, savedNet.getEndPinNumber());
+        assertEquals(startComponentInstance.getId(), savedNet.startPin().componentInstanceId());
+        assertEquals(2, savedNet.startPin().pinNumber());
+        assertEquals(1, savedNet.endPin().pinNumber());
     }
 
 
@@ -89,23 +91,27 @@ class DrawServiceTest {
                 .id(1L)
                 .type(componentType1)
                 .build();
+        when(componentInstanceRepository.find(firstComponentInstance.getId())).thenReturn(firstComponentInstance);
 
         ComponentInstance secondComponentInstance = ComponentInstance.builder()
                 .id(2L)
                 .type(componentType1)
                 .build();
+        when(componentInstanceRepository.find(secondComponentInstance.getId())).thenReturn(secondComponentInstance);
 
         ComponentInstance thirdComponentInstance = ComponentInstance.builder()
                 .id(3L)
                 .type(componentType2)
                 .build();
+        when(componentInstanceRepository.find(thirdComponentInstance.getId())).thenReturn(thirdComponentInstance);
+
         LinkChipService drawService = new LinkChipService(netRepository, componentInstanceRepository);
         List<Net> expectedNets = List.of(
-                new Net(1L, firstComponentInstance, secondComponentInstance, 3, 1),
-                new Net(2L, secondComponentInstance, thirdComponentInstance, 3, 3),
-                new Net(3L, firstComponentInstance, thirdComponentInstance, 2, 2)
+                new Net(1L, new Pin(firstComponentInstance.getId(), 3), new Pin(secondComponentInstance.getId(), 1)),
+                new Net(2L, new Pin(secondComponentInstance.getId(), 3), new Pin(thirdComponentInstance.getId(), 3)),
+                new Net(3L, new Pin(firstComponentInstance.getId(), 2), new Pin(thirdComponentInstance.getId(), 2))
         );
-        Mockito.when(netRepository.findAll()).thenReturn(expectedNets);
+        when(netRepository.findAll()).thenReturn(expectedNets);
 
         //when
 
