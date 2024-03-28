@@ -25,38 +25,6 @@ class DrawServiceTest {
     private ComponentInstanceRepository componentInstanceRepository = Mockito.mock(ComponentInstanceRepository.class);
     private NetRepository netRepository = Mockito.mock(NetRepository.class);
 
-    @Test
-    void should_link_two_component_instance_when_link_given_two_pin_instance() {
-
-
-        Long startComponentInstanceId = 1L;
-        Long endComponentInstanceId = 2L;
-        int startPinNumber = 2;
-        int endPinNumber = 1;
-        LinkChipService drawService = new LinkChipService(netRepository, componentInstanceRepository);
-        ArgumentCaptor<Net> netCaptor = ArgumentCaptor.forClass(Net.class);
-        ComponentType componentType = new ComponentType("A", Map.of(
-                1, List.of(2, 3),
-                2, List.of(),
-                3, List.of()
-        ));
-        ComponentInstance startComponentInstance = ComponentInstance.builder().id(1L).type(componentType).build();
-        ComponentInstance endComponentInstance = ComponentInstance.builder().id(2L).type(componentType).build();
-        when(componentInstanceRepository.find(startComponentInstanceId)).thenReturn(startComponentInstance);
-        when(componentInstanceRepository.find(endComponentInstanceId)).thenReturn(endComponentInstance);
-
-        // when
-        drawService.link(new Pin(startComponentInstanceId, startPinNumber), new Pin(endComponentInstanceId, endPinNumber));
-
-        // then
-        Mockito.verify(netRepository).save(netCaptor.capture());
-        Net savedNet = netCaptor.getValue();
-        assertEquals(startComponentInstance.getId(), savedNet.startPin().componentInstanceId());
-        assertEquals(2, savedNet.startPin().pinNumber());
-        assertEquals(1, savedNet.endPin().pinNumber());
-    }
-
-
 //     ┌───────┐         ┌────────┐
 //   1┌┐  A    ┌┐3     1┌┐   A    ┌┐3
 //    └┘ 1->3  └───────>└┘ 1->3   └│

@@ -5,8 +5,6 @@ import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceRepositor
 import com.logos.ddd.pcb.v2.domain.component.instance.Pin;
 import com.logos.ddd.pcb.v2.domain.net.Net;
 import com.logos.ddd.pcb.v2.domain.net.NetRepository;
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -86,10 +84,5 @@ public class LinkChipService {
 
         // If there is no path from the start node to the end node, return -1
         return -1;
-    }
-
-    public void link(Pin startPin, Pin endPin) {
-        Net net = new Net(1001L, startPin, endPin);
-        netRepository.save(net);
     }
 }
