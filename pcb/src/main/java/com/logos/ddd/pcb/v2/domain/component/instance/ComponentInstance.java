@@ -18,7 +18,6 @@ public class ComponentInstance {
     private List<PinInstance> pins;
 
     public List<Integer> getOutPins(int pinNumber) {
-        return pins.stream().filter(pin -> pin.getNumber() == pinNumber).findFirst()
-                .map(PinInstance::getOutPutPinNumber).orElse(List.of());
+        return type.getOutputPins(pinNumber);
     }
 }

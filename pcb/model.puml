@@ -1,0 +1,22 @@
+@startuml
+' !pragma layout elk
+hide empty members
+class ComponentType {
+    mapOfPushes
+    List getPushedFromPinNumber(int)
+}
+
+class ComponentInstance {
+
+}
+
+ComponentType "1" -- "*" ComponentInstance
+
+class Pin
+
+ComponentInstance "1" - "*" Pin
+
+class Net
+
+Pin "2" - "1" Net
+@enduml
