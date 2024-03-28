@@ -14,6 +14,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,10 +35,11 @@ class DrawServiceTest {
         int endPinNumber = 1;
         LinkChipService drawService = new LinkChipService(netRepository, componentInstanceRepository);
         ArgumentCaptor<Net> netCaptor = ArgumentCaptor.forClass(Net.class);
-        PinType pinType2 = new PinType(2, List.of());
-        PinType pinType3 = new PinType(3, List.of());
-        PinType pinType1 = new PinType(1, List.of(2, 3));
-        ComponentType componentType = new ComponentType("A", List.of(pinType1, pinType2, pinType3));
+        ComponentType componentType = new ComponentType("A", Map.of(
+                1, List.of(2, 3),
+                2, List.of(),
+                3, List.of()
+        ));
         ComponentInstance startComponentInstance = ComponentInstance.builder().id(1L).type(componentType).build();
         ComponentInstance endComponentInstance = ComponentInstance.builder().id(2L).type(componentType).build();
         Mockito.when(componentInstanceRepository.find(startComponentInstanceId)).thenReturn(startComponentInstance);
@@ -55,7 +57,7 @@ class DrawServiceTest {
     }
 
 
-    //     ┌───────┐         ┌────────┐
+//     ┌───────┐         ┌────────┐
 //   1┌┐  A    ┌┐3     1┌┐   A    ┌┐3
 //    └┘ 1->3  └───────>└┘ 1->3   └│
 //     │ 4->2  │         │ 4->2   ││
@@ -75,16 +77,16 @@ class DrawServiceTest {
     @Test
     void should_return_correct_hop_count_when_link_given_three_component_instances() {
         // Arrange
-        PinType pinType1 = new PinType(1, List.of(3));
-        PinType pinType2 = new PinType(2, List.of());
-        PinType pinType3 = new PinType(3, List.of());
-        PinType pinType4 = new PinType(4, List.of(2));
-        PinType pinType11 = new PinType(2, List.of());
-        PinType pinType12 = new PinType(3, List.of());
-        PinType pinType13 = new PinType(3, List.of(1));
-        PinType pinType14 = new PinType(2, List.of(4));
-        ComponentType componentType1 = new ComponentType("A", List.of(pinType1, pinType2, pinType3, pinType4));
-        ComponentType componentType2 = new ComponentType("B", List.of(pinType11, pinType12, pinType13, pinType14));
+        ComponentType componentType1 = new ComponentType("A", Map.of(
+                1, List.of(3),
+                2, List.of(),
+                3, List.of(),
+                4, List.of(2)
+        ));
+        ComponentType componentType2 = new ComponentType("B", Map.of(
+                2, List.of(4),
+                3, List.of(1)
+        ));
         ComponentInstance firstComponentInstance = ComponentInstance.builder()
                 .id(1L)
                 .type(componentType1)
