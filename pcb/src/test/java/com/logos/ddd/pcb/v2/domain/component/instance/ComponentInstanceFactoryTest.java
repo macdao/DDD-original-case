@@ -23,9 +23,6 @@ class ComponentInstanceFactoryTest {
         ComponentInstance componentInstance = factory.createByType(componentType);
         //then
         assertEquals("A", componentInstance.getType().getName());
-        assertEquals(2, componentInstance.getPins().size());
-//        assertEquals(1, componentInstance.getPins().get(0).getNumber());
-//        assertEquals(2, componentInstance.getPins().get(1).getNumber());
         assertEquals(List.of(1), componentInstance.getOutPins(2));
     }
 }

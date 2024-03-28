@@ -15,7 +15,6 @@ import java.util.List;
 public class ComponentInstance {
     private Long id;
     private ComponentType type;
-    private List<PinInstance> pins;
 
     public List<Integer> getOutPins(int pinNumber) {
         return type.getOutputPins(pinNumber);

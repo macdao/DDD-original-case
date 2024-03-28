@@ -9,7 +9,6 @@ public class ComponentInstanceFactory {
     public ComponentInstance createByType(ComponentType componentType) {
         ComponentInstance componentInstance = new ComponentInstance();
         componentInstance.setType(componentType);
-        componentInstance.setPins(componentType.getMapOfPushes().keySet().stream().map(PinInstance::new).toList());
         return componentInstance;
     }
 

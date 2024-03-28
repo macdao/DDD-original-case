@@ -4,7 +4,6 @@ package com.logos.ddd.pcb.v2.domain;
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceFactory;
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceRepository;
-import com.logos.ddd.pcb.v2.domain.component.instance.PinInstance;
 import com.logos.ddd.pcb.v2.domain.component.type.ComponentType;
 import com.logos.ddd.pcb.v2.domain.net.Net;
 import com.logos.ddd.pcb.v2.domain.net.NetRepository;
@@ -89,19 +88,16 @@ class DrawServiceTest {
         ComponentInstance firstComponentInstance = ComponentInstance.builder()
                 .id(1L)
                 .type(componentType1)
-                .pins(componentType1.getMapOfPushes().keySet().stream().map(PinInstance::new).collect(Collectors.toList()))
                 .build();
 
         ComponentInstance secondComponentInstance = ComponentInstance.builder()
                 .id(2L)
                 .type(componentType1)
-                .pins(componentType1.getMapOfPushes().keySet().stream().map(PinInstance::new).collect(Collectors.toList()))
                 .build();
 
         ComponentInstance thirdComponentInstance = ComponentInstance.builder()
                 .id(3L)
                 .type(componentType2)
-                .pins(componentType2.getMapOfPushes().keySet().stream().map(PinInstance::new).collect(Collectors.toList()))
                 .build();
         LinkChipService drawService = new LinkChipService(netRepository, componentInstanceRepository);
         List<Net> expectedNets = List.of(
