@@ -19,8 +19,4 @@ public class ComponentType {
     public List<Integer> getOutputPins(int i) {
         return mapOfPushes.get(i);
     }
-
-    public List<PinType> getPinTypes() {
-        return mapOfPushes.entrySet().stream().map(entry -> new PinType(entry.getKey(), entry.getValue())).toList();
-    }
 }

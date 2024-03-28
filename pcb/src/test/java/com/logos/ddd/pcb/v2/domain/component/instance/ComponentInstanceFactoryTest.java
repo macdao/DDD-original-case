@@ -1,7 +1,6 @@
 package com.logos.ddd.pcb.v2.domain.component.instance;
 
 import com.logos.ddd.pcb.v2.domain.component.type.ComponentType;
-import com.logos.ddd.pcb.v2.domain.component.type.PinType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
