@@ -19,4 +19,8 @@ public class ComponentInstance {
     public List<Integer> getOutPins(int pinNumber) {
         return type.getOutputPins(pinNumber);
     }
+
+    public Pin pin(int pinNumber) {
+        return new Pin(id, pinNumber);
+    }
 }

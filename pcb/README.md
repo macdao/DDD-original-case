@@ -6,5 +6,5 @@
 * [x] get outPutPinNumber from ComponentType instead of PinInstance
 * [x] remove PinInstance
 * [x] add Pin
-* [ ] refactor LinkChipService
+* [x] refactor LinkChipService
 * [x] rewrite link logic in use case

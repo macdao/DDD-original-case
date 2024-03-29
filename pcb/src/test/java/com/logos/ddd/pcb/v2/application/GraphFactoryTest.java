@@ -1,25 +1,21 @@
-package com.logos.ddd.pcb.v2.domain;
-
+package com.logos.ddd.pcb.v2.application;
 
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
-import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceFactory;
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceRepository;
 import com.logos.ddd.pcb.v2.domain.component.instance.Pin;
 import com.logos.ddd.pcb.v2.domain.component.type.ComponentType;
 import com.logos.ddd.pcb.v2.domain.net.Net;
 import com.logos.ddd.pcb.v2.domain.net.NetRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-class DrawServiceTest {
+class GraphFactoryTest {
 
 
     private ComponentInstanceRepository componentInstanceRepository = Mockito.mock(ComponentInstanceRepository.class);
@@ -43,7 +39,7 @@ class DrawServiceTest {
 //    └────────>┘       └┘
 //              └───────┘
     @Test
-    void should_return_correct_hop_count_when_link_given_three_component_instances() {
+    void should_return_correct_graph_when_link_given_three_component_instances() {
         // Arrange
         ComponentType componentType1 = new ComponentType("A", Map.of(
                 1, List.of(3),
@@ -73,18 +69,31 @@ class DrawServiceTest {
                 .build();
         when(componentInstanceRepository.find(thirdComponentInstance.getId())).thenReturn(thirdComponentInstance);
 
-        LinkChipService drawService = new LinkChipService(netRepository, componentInstanceRepository);
         List<Net> expectedNets = List.of(
-                new Net(1L, new Pin(firstComponentInstance.getId(), 3), new Pin(secondComponentInstance.getId(), 1)),
-                new Net(2L, new Pin(secondComponentInstance.getId(), 3), new Pin(thirdComponentInstance.getId(), 3)),
-                new Net(3L, new Pin(firstComponentInstance.getId(), 2), new Pin(thirdComponentInstance.getId(), 2))
+                new Net(1L, firstComponentInstance.pin(3), secondComponentInstance.pin(1)),
+                new Net(2L, secondComponentInstance.pin(3), thirdComponentInstance.pin(3)),
+                new Net(3L, firstComponentInstance.pin(2), thirdComponentInstance.pin(2))
         );
         when(netRepository.findAll()).thenReturn(expectedNets);
 
         //when
 
-        int hops = drawService.getHops(1L, 3, 3L, 3);
+        GraphFactory graphFactory = new GraphFactory(netRepository, componentInstanceRepository);
+
+        Map<Pin, List<Pin>> graph = graphFactory.buildGraph();
+
         //then
-        assertEquals(2, hops);
+        assertThat(graph.size()).isEqualTo(6);
+        assertThat(graph.get(firstComponentInstance.pin(1))).isNull();
+        List<Pin> outputPinListOf12 = graph.get(firstComponentInstance.pin(2));
+        assertThat(outputPinListOf12.size()).isEqualTo(1);
+        assertThat(outputPinListOf12.get(0)).isEqualTo(thirdComponentInstance.pin(2));
+        List<Pin> outputPinListOf21 = graph.get(secondComponentInstance.pin(1));
+        assertThat(outputPinListOf21.size()).isEqualTo(1);
+        assertThat(outputPinListOf21.get(0)).isEqualTo(secondComponentInstance.pin(3));
+        List<Pin> outputPinListOf33 = graph.get(thirdComponentInstance.pin(3));
+        assertThat(outputPinListOf33.size()).isEqualTo(1);
+        assertThat(outputPinListOf33.get(0)).isEqualTo(thirdComponentInstance.pin(1));
     }
+
 }
