@@ -42,7 +42,7 @@ class HopCalculatorTest {
         );
 
         //when
-        int hops = hopCalculator.getHops(1L, 3, 3L, 3, graph);
+        int hops = hopCalculator.getHops(new Pin(1L, 3), new Pin(3L, 3), graph);
         //then
         assertEquals(2, hops);
     }

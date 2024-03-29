@@ -9,22 +9,20 @@ import java.util.*;
 public class HopCalculator {
 
 
-    public int getHops(Long startComponentInstanceId, int startPinNumber, Long endComponentInstanceId, int endPinNumber, Map<Pin, List<Pin>> graph) {
+    public int getHops(Pin startPin, Pin endPin, Map<Pin, List<Pin>> graph) {
         // Define the start and end nodes
-        Pin startNode = new Pin(startComponentInstanceId, startPinNumber);
-        Pin endNode = new Pin(endComponentInstanceId, endPinNumber);
 
         // Use BFS to find the shortest path
         Queue<Pin> queue = new LinkedList<>();
         Map<Pin, Integer> distances = new HashMap<>();
-        queue.offer(startNode);
-        distances.put(startNode, 0);
+        queue.offer(startPin);
+        distances.put(startPin, 0);
 
         while (!queue.isEmpty()) {
             Pin node = queue.poll();
             int distance = distances.get(node);
 
-            if (node.equals(endNode)) {
+            if (node.equals(endPin)) {
                 return distance;
             }
 
