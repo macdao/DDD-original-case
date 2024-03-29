@@ -12,7 +12,7 @@
 * [x] use Pin in ComponentInstance.getOutPins
 * [x] add ComponentInstance.Id
 * [x] add Net.id
-* [ ] clean model annotations
+* [x] clean model annotations
 
 主要变化，
 

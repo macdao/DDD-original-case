@@ -1,16 +1,13 @@
 package com.logos.ddd.pcb.v2.domain.component.instance;
 
 import com.logos.ddd.pcb.v2.domain.component.type.ComponentType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@Builder
+@Getter
+@RequiredArgsConstructor
 public class ComponentInstance {
     private final Id id;
     private final ComponentType type;

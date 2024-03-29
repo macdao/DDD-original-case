@@ -7,8 +7,6 @@ import java.util.*;
 
 @Service
 public class HopCalculator {
-
-
     public int getHops(Pin startPin, Pin endPin, Map<Pin, List<Pin>> graph) {
         // Define the start and end nodes
 
