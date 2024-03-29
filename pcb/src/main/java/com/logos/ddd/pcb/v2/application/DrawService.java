@@ -10,14 +10,12 @@ import org.springframework.stereotype.Service;
 public class DrawService {
 
     private final ComponentInstanceRepository componentInstanceRepository;
-    private final ComponentInstanceFactory componentInstanceFactory;
 
     private final NetRepository netRepository;
 
 
-    public DrawService(ComponentInstanceRepository componentInstanceRepository, ComponentInstanceFactory componentInstanceFactory, NetRepository netRepository) {
+    public DrawService(ComponentInstanceRepository componentInstanceRepository, NetRepository netRepository) {
         this.componentInstanceRepository = componentInstanceRepository;
-        this.componentInstanceFactory = componentInstanceFactory;
         this.netRepository = netRepository;
     }
 
@@ -31,7 +29,7 @@ public class DrawService {
     }
 
     public ComponentInstance createComponentInstance(ComponentType type) {
-        ComponentInstance componentInstance = componentInstanceFactory.createByType(type);
+        ComponentInstance componentInstance = new ComponentInstance(1L, type);
         componentInstanceRepository.save(componentInstance);
         return componentInstance;
     }

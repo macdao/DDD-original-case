@@ -8,3 +8,4 @@
 * [x] add Pin
 * [x] refactor LinkChipService
 * [x] rewrite link logic in use case
+* [x] remove ComponentInstanceFactory

@@ -10,11 +10,10 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class ComponentInstance {
-    private Long id;
-    private ComponentType type;
+    private final Long id;
+    private final ComponentType type;
 
     public List<Integer> getOutPins(int pinNumber) {
         return type.getOutputPins(pinNumber);
