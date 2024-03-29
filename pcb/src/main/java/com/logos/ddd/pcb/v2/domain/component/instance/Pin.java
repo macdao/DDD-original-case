@@ -6,4 +6,8 @@ public record Pin(Long componentInstanceId, int pinNumber) {
     public Net linkTo(long NetId, Pin endPin) {
         return new Net(NetId, this, endPin);
     }
+
+    public boolean isOnSameComponentInstance(Pin neighbor) {
+        return componentInstanceId.equals(neighbor.componentInstanceId());
+    }
 }

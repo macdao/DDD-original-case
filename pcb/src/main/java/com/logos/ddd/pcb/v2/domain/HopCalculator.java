@@ -32,7 +32,7 @@ public class HopCalculator {
                 if (!distances.containsKey(neighbor)) {
                     queue.offer(neighbor);
                     // Only increase the distance if the hop is not within the same component instance
-                    if (!node.componentInstanceId().equals(neighbor.componentInstanceId())) {
+                    if (!node.isOnSameComponentInstance(neighbor)) {
                         distances.put(neighbor, distance + 1);
                     } else {
                         distances.put(neighbor, distance);
