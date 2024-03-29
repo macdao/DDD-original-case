@@ -23,7 +23,7 @@ public class DrawService {
         Pin startPin = new Pin(new ComponentInstance.Id(startComponentInstanceId), startPinNumber);
         Pin endPin = new Pin(new ComponentInstance.Id(endComponentInstanceId), endPinNumber);
         // todo generate net id
-        Net net = startPin.linkTo(1L, endPin);
+        Net net = startPin.linkTo(new Net.Id(1L), endPin);
 
         netRepository.save(net);
     }

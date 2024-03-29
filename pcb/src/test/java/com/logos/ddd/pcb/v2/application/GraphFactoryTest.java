@@ -60,9 +60,9 @@ class GraphFactoryTest {
         when(componentInstanceRepository.find(thirdComponentInstance.getId())).thenReturn(thirdComponentInstance);
 
         List<Net> expectedNets = List.of(
-                new Net(1L, firstComponentInstance.pin(3), secondComponentInstance.pin(1)),
-                new Net(2L, secondComponentInstance.pin(3), thirdComponentInstance.pin(3)),
-                new Net(3L, firstComponentInstance.pin(2), thirdComponentInstance.pin(2))
+                new Net(new Net.Id(1L), firstComponentInstance.pin(3), secondComponentInstance.pin(1)),
+                new Net(new Net.Id(2L), secondComponentInstance.pin(3), thirdComponentInstance.pin(3)),
+                new Net(new Net.Id(3L), firstComponentInstance.pin(2), thirdComponentInstance.pin(2))
         );
         when(netRepository.findAll()).thenReturn(expectedNets);
 

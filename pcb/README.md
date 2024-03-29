@@ -11,7 +11,7 @@
 * [x] remove ComponentInstanceFactory
 * [x] use Pin in ComponentInstance.getOutPins
 * [x] add ComponentInstance.Id
-* [ ] add Net.id
+* [x] add Net.id
 * [ ] clean model annotations
 
 主要变化，
