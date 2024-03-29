@@ -49,22 +49,14 @@ class GraphFactoryTest {
                 2, List.of(4),
                 3, List.of(1)
         ));
-        ComponentInstance firstComponentInstance = ComponentInstance.builder()
-                .id(1L)
-                .type(componentType1)
-                .build();
+        ComponentInstance firstComponentInstance = new ComponentInstance(new ComponentInstance.Id(1L), componentType1);
         when(componentInstanceRepository.find(firstComponentInstance.getId())).thenReturn(firstComponentInstance);
 
-        ComponentInstance secondComponentInstance = ComponentInstance.builder()
-                .id(2L)
-                .type(componentType1)
-                .build();
+        ComponentInstance secondComponentInstance = new ComponentInstance(new ComponentInstance.Id(2L), componentType1);
         when(componentInstanceRepository.find(secondComponentInstance.getId())).thenReturn(secondComponentInstance);
 
-        ComponentInstance thirdComponentInstance = ComponentInstance.builder()
-                .id(3L)
-                .type(componentType2)
-                .build();
+        ComponentInstance thirdComponentInstance = new ComponentInstance(new ComponentInstance.Id(3L), componentType2);
+
         when(componentInstanceRepository.find(thirdComponentInstance.getId())).thenReturn(thirdComponentInstance);
 
         List<Net> expectedNets = List.of(

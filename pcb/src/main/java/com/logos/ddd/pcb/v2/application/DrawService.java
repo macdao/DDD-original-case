@@ -19,9 +19,9 @@ public class DrawService {
         this.netRepository = netRepository;
     }
 
-    public void linkChip(Long startComponentInstanceId, int startPinNumber,Long endComponentInstanceId, int endPinNumber) {
-        Pin startPin = new Pin(startComponentInstanceId, startPinNumber);
-        Pin endPin = new Pin(endComponentInstanceId, endPinNumber);
+    public void linkChip(Long startComponentInstanceId, int startPinNumber, Long endComponentInstanceId, int endPinNumber) {
+        Pin startPin = new Pin(new ComponentInstance.Id(startComponentInstanceId), startPinNumber);
+        Pin endPin = new Pin(new ComponentInstance.Id(endComponentInstanceId), endPinNumber);
         // todo generate net id
         Net net = startPin.linkTo(1L, endPin);
 
@@ -29,7 +29,8 @@ public class DrawService {
     }
 
     public ComponentInstance createComponentInstance(ComponentType type) {
-        ComponentInstance componentInstance = new ComponentInstance(1L, type);
+        // todo generate id
+        ComponentInstance componentInstance = new ComponentInstance(new ComponentInstance.Id(1L), type);
         componentInstanceRepository.save(componentInstance);
         return componentInstance;
     }

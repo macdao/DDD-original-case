@@ -3,20 +3,22 @@
 hide empty members
 class ComponentType {
     mapOfPushes
-    List getPushedFromPinNumber(int)
+    List<Integer> getPushedFromPinNumber(int)
 }
 
-class ComponentInstance {
-
+class ComponentInstance <<entity>> {
 }
 
 ComponentType "1" -- "*" ComponentInstance
 
-class Pin
+class Pin <<value object>> {
+    int pinNumber
+}
 
 ComponentInstance "1" - "*" Pin
 
-class Net
+class Net <<entity>>
 
-Pin "2" - "1" Net
+Pin "1" -- "start" Net
+Pin "1" -- "end" Net
 @enduml

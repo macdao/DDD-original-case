@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ComponentInstance {
-    private final Long id;
+    private final Id id;
     private final ComponentType type;
 
     public Pin pin(int pinNumber) {
@@ -21,5 +21,9 @@ public class ComponentInstance {
 
     public List<Pin> getOutPins(Pin pin) {
         return type.getOutputPins(pin.pinNumber()).stream().map(number -> new Pin(id, number)).toList();
+    }
+
+    public record Id(long value) {
+
     }
 }
