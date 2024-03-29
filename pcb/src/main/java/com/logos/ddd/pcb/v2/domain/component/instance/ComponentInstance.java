@@ -15,11 +15,11 @@ public class ComponentInstance {
     private final Long id;
     private final ComponentType type;
 
-    public List<Integer> getOutPins(int pinNumber) {
-        return type.getOutputPins(pinNumber);
-    }
-
     public Pin pin(int pinNumber) {
         return new Pin(id, pinNumber);
+    }
+
+    public List<Pin> getOutPins(Pin pin) {
+        return type.getOutputPins(pin.pinNumber()).stream().map(number -> new Pin(id, number)).toList();
     }
 }

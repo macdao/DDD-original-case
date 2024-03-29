@@ -35,19 +35,17 @@ public class GraphFactory {
             graph.get(start).add(end);
 
             ComponentInstance startComponentInstance = componentInstanceRepository.find(net.startPin().componentInstanceId());
-            List<Integer> outputPins = startComponentInstance.getOutPins(net.startPin().pinNumber());
-            for (Integer outputPin : outputPins) {
-                Pin internalEnd = new Pin(net.startPin().componentInstanceId(), outputPin);
+            List<Pin> outputPins = startComponentInstance.getOutPins(net.startPin());
+            if (!outputPins.isEmpty()) {
                 graph.putIfAbsent(start, new ArrayList<>());
-                graph.get(start).add(internalEnd);
+                graph.get(start).addAll(outputPins);
             }
 
             ComponentInstance endComponentInstance = componentInstanceRepository.find(net.endPin().componentInstanceId());
-            List<Integer> endOutputPins = endComponentInstance.getOutPins(net.endPin().pinNumber());
-            for (Integer endOutputPin : endOutputPins) {
-                var internalEnd = new Pin(endComponentInstance.getId(), endOutputPin);
+            List<Pin> endOutputPins = endComponentInstance.getOutPins(net.endPin());
+            if (!endOutputPins.isEmpty()) {
                 graph.putIfAbsent(end, new ArrayList<>());
-                graph.get(end).add(internalEnd);
+                graph.get(end).addAll(endOutputPins);
             }
         }
         return graph;

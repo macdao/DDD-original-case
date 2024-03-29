@@ -9,3 +9,4 @@
 * [x] refactor LinkChipService
 * [x] rewrite link logic in use case
 * [x] remove ComponentInstanceFactory
+* [x] use Pin in ComponentInstance.getOutPins
