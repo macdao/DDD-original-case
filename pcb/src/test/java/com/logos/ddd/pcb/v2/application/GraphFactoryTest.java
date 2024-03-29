@@ -1,11 +1,9 @@
 package com.logos.ddd.pcb.v2.application;
 
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
-import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceRepository;
 import com.logos.ddd.pcb.v2.domain.component.instance.Pin;
 import com.logos.ddd.pcb.v2.domain.component.type.ComponentType;
 import com.logos.ddd.pcb.v2.domain.net.Net;
-import com.logos.ddd.pcb.v2.domain.net.NetRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

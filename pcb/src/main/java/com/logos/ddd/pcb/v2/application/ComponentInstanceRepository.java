@@ -1,6 +1,7 @@
-package com.logos.ddd.pcb.v2.domain.component.instance;
+package com.logos.ddd.pcb.v2.application;
 
 
+import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
 import org.springframework.stereotype.Component;
 
 @Component

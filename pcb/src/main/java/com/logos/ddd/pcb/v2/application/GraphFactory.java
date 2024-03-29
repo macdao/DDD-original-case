@@ -1,10 +1,8 @@
 package com.logos.ddd.pcb.v2.application;
 
 import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstance;
-import com.logos.ddd.pcb.v2.domain.component.instance.ComponentInstanceRepository;
 import com.logos.ddd.pcb.v2.domain.component.instance.Pin;
 import com.logos.ddd.pcb.v2.domain.net.Net;
-import com.logos.ddd.pcb.v2.domain.net.NetRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
